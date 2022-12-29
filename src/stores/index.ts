@@ -46,7 +46,7 @@ export const useStore = defineStore('store1', {
   actions: {
     uploadFile(file: any, text: string) {
       const formData = new FormData()
-      formData.append('file', file?.raw)
+      formData.append('file', text === '上传' ? file.raw : file)
       upload(formData)
         .then(res => {
           ElNotification({
@@ -62,6 +62,20 @@ export const useStore = defineStore('store1', {
           this.slider.max =
             res.data.data.subtitles[res.data.data.subtitles.length - 1].end_time
           useShowWhich()
+          this.subtitles.shift()
+          if (this.warnings.length !== 0) {
+            setTimeout(() => {
+              this.warnings.forEach(item => {
+                ElNotification({
+                  title: 'Warning',
+                  message: item,
+                  type: 'warning',
+                  duration: 10000,
+                  position: 'top-left'
+                })
+              })
+            }, 1000)
+          }
           if (this.errors.length !== 0) {
             setTimeout(() => {
               this.errors.forEach(item => {
@@ -74,17 +88,6 @@ export const useStore = defineStore('store1', {
                 })
               })
             }, 2000)
-          }
-          if (this.warnings.length !== 0) {
-            setTimeout(() => {
-              this.warnings.forEach(item => {
-                ElNotification({
-                  title: 'Warning',
-                  message: item,
-                  type: 'warning'
-                })
-              })
-            }, 1000)
           }
         })
         .catch(err => {

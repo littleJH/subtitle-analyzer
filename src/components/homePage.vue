@@ -152,9 +152,8 @@ const format = (value: number) => {
   </div>
   <el-drawer
     v-model="visibilityBinding"
-    :title="`修改字幕${commandText}`"
     direction="rtl"
-    size="66%"
+    size="50%"
     :modal="false"
     @closed="closeDrawer"
   >
